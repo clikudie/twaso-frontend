@@ -1,24 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import AddUrl from './components/AddUrl';
+import { TwasoClient } from './services/twaso-api/TwasoClient';
+import { IShortenUrlRequest, IShortenUrlResponse } from './services/twaso-api/TwasoSchema';
 
-function App() {
+const App = (): JSX.Element => {
+  const [url, setUrl] = useState<IShortenUrlResponse | null>(null);
+
+  let twasoClient = new TwasoClient();
+
+  const shortenUrl = async (url: IShortenUrlRequest) => {
+    const response: IShortenUrlResponse = await twasoClient.shortenUrl(url);
+    console.log(response);
+    setUrl(response);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <AddUrl shortenUrl={shortenUrl} />
     </div>
   );
 }
